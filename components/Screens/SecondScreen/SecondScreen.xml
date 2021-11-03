@@ -1,0 +1,34 @@
+<component name="SecondScreen" extends = "Group">
+    <script type="text/brightscript" uri="SecondScreen.brs" />   
+     
+      <interface>
+         <field id="dataSecondScreen" type="node" onChange="customizeSecondScreen" alwaysNotify = "true" />
+         <field id="setFocusVideo" type="bool" onChange="setFocusVideo" alwaysNotify="true"/>
+         <field id="videoSetter" type="bool" onChange="videoSetter" alwaysNotify = "true"/>
+         <field id="animationTrigger" type="bool" />
+         <field id = "backAnimation" type="bool" />
+      </interface>
+    
+      <children>
+         <Poster id = "bgPoster" uri ="pkg:/images/splash_fhd.jpg" width = "1280" height = "720" />
+         <Label id="title" height="44" font="font:MediumBoldSystemFont" text = "Title" color = "#FFFFFF" translation="[50,100]" />
+         <Label id ="titleText" height="60" width="700" wrap="true" font="font:MediumBoldSystemFont" color = "#FFFFFF"  translation = "[50, 140]" text= "title" />
+         <Label id = "description" text="Description" font="font:MediumBoldSystemFont" translation = "[50, 190]" />
+         <Label id = "descriptionText" width="700" wrap="true" height="500.0"  font="font:MediumBoldSystemFont" color = "#FFFFFF" translation = "[50, 230]"   />
+         <Poster id = "videoFocus" width="481" height="328" uri = "pkg:/images/ic_focus_list.9.png" translation="[785,136]" />
+         <Video id="filmVideo" width="450"  height="300" translation="[800, 150]" />    
+        
+        <Animation id="translationAnimation"  duration="1.0" repeat="false"  easeFunction="linear" >
+          <Vector2DFieldInterpolator id = "interpTranslation"   fieldToInterp="filmVideo.translation" />
+        </Animation>
+
+       <Animation id="widthAnimation"  duration="1.0" repeat="false"  easeFunction="linear" >
+          <FloatFieldInterpolator id = "interpWidth"  fieldToInterp="filmVideo.width" />
+       </Animation>
+      
+       <Animation id="heightAnimation"  duration="1.0" repeat="false"  easeFunction="linear" >
+          <FloatFieldInterpolator id = "interpheight" key="[0.0, 1.0]" keyValue="[ 300.0, 720.0]"  fieldToInterp="filmVideo.height" />
+       </Animation>
+      </children>
+      
+</component>
