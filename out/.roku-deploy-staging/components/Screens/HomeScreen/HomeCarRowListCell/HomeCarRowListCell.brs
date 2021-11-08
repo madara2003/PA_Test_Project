@@ -1,17 +1,12 @@
 sub init()
     m.automobilePoster = m.top.findNode("PosterOfCar") 
-    m.video = m.top.findNode("cellVideo")
     m.carVideoAnimation = m.top.findNode("carVideoAnimation")
     m.favorites = m.top.findNode("Favorites")
-    m.video.observeField("state", "changeAfterBuffering")
     m.animationVideo = m.top.findNode("animationVideo")
-    m.video.loop = true
 end sub
 
 function onItemFocus()
-   if m.top.itemHasFocus = true
       m.valueofFirstKey = 1.0
-   end if
 end function
 
 function fireAnimation()
@@ -28,8 +23,7 @@ function changeAfterBuffering(event)
          m.automobilePoster.visible = false
          m.favorites.visible = false
          m.valueofFirstKey = 0.0  
-      else if bufferingEvent = "stop"
-      else
+      else if bufferingEvent = "stopped"   
          m.valueofFirstKey = 1.0
          m.automobilePoster.visible = true
          m.favorites.visible = true
@@ -39,27 +33,31 @@ end function
 function displayCarsImages()
    carImages = m.top.itemContent
    resolutionCellImage = carImages.Description.Replace("1280x720.jpg", "280x140.jpg")
-   ? resolutionCellImage 
    m.automobilePoster.uri = resolutionCellImage 
-   m.automobilePoster.width = 280
-   m.automobilePoster.height = 140
-   if not carImages.HDBranded
-      m.favorites.uri ="pkg:/images/icActiveDislike.png"
-   else if carImages.HDBranded
+   m.automobilePoster.width = m.top.width
+   m.automobilePoster.height = m.top.width
+   if carImages.HDBranded
       m.favorites.uri = "pkg:/images/icActiveLike.png"
+   else 
+      m.favorites.uri ="pkg:/images/icActiveDislike.png"   
    end if
-   carImages = m.top.itemContent
-   videoContent = createObject("RoSGNode", "ContentNode")
-   videoContent.streamformat = "hls"
-   videoContent.url = carImages.Url   
-   m.video.content = videoContent
-   if carImages.isPlayed = false 
-      m.opacity = 0.0
-   else    
-   end if 
-    if not carImages.isPlayed 
-      m.video.control = "stop"
-    else 
+    if  carImages.isPlayed 
+     if m.video = invalid
+      m.video = CreateObject("roSGNode", "Video")
+      m.video.width  = m.top.width
+      m.video.height  = m.top.height
+      videoContent = createObject("RoSGNode", "ContentNode")
+      m.top.insertChild(m.video, 0) 
+      videoContent.streamformat = "hls"
+      videoContent.url = carImages.Url   
+      m.video.content = videoContent
       m.video.control = "play"
+      m.video.loop = true
+      m.video.observeField("state", "changeAfterBuffering")
+     end if
+    else if m.video <> invalid
+      m.video.control = "stop"
+      m.top.removeChild(m.video)
+      m.video = invalid
    end if
 end function

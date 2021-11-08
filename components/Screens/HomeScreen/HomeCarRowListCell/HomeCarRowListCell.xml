@@ -5,18 +5,16 @@
              <field id="itemContent" type="node" onChange = "displayCarsImages" />
              <field id="focusPercent" type="float" onChange = "fireAnimation"/>
              <field id="itemHasFocus" type="bool" onChange = "onItemFocus" alwaysNotify = "true"/>
+             <field id="width" type="float" />
+             <field id="height" type="float" />
       </interface>
     
-     <children>
-        <Video id = "cellVideo" width ="280" height="140" />
-        
-        <Poster id = "PosterOfCar" visible ="true" />
-      
+     <children>   
+        <Poster id = "PosterOfCar" visible ="true"/>
         <Poster id = "Favorites" visible ="true" width="25" height ="25" translation = "[230, 110]" />
-
-        <Animation   id="carVideoAnimation"  duration="4"    easeFunction="linear" >
-           <FloatFieldInterpolator    id = "animationVideo"   key="[0.0,  1.0]"           fieldToInterp="PosterOfCar.opacity"   />
-        </Animation>
+        <Animation   id="carVideoAnimation"  duration="2"    easeFunction="linear" >
+          <FloatFieldInterpolator    id = "animationVideo" key="[0.0, 1.0]"  fieldToInterp="PosterOfCar.opacity"   />
+         </Animation>
      </children>
      
 </component>
