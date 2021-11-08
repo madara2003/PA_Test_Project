@@ -25,7 +25,7 @@ sub init()
  function handleResponse(event)
    data = event.getData()
    content = CreateObject("RoSGNode","ContentNode")
- 
+   content.TITLE = data["rss"][0]["channel"][0]["title"]
    columnSpacings = []
    dataofChannel =  data["rss"][0]["channel"]
    count = 0
@@ -64,6 +64,7 @@ sub init()
     End For  
        m.rowListOfCars.columnSpacings =  columnSpacings
        m.rowListOfCars.content = content
+
  end function
 
 Function updateFavoriteData(key)
@@ -83,6 +84,7 @@ function changeHomeScreenContent(event)
   prevItem.isPlayed = false 
   m.blendAnimation.control = "start"
   index = event.getData()
+  
   m.rowListOfCars.content.getChild(index).isPlayed = true
   m.currentElement = m.rowListOfCars.content.getChild(index) 
   m.indexOfPrevItem = index
@@ -95,9 +97,13 @@ end function
 
 function setSecondScreenContent(event)
   data = event.getData()
+  trigger =  m.currentElement.HDBranded 
+  
   m.secondScreenData = m.rowListOfCars.content.getChild(data) 
   m.secondScreenComponent = CreateObject("roSGNode", "SecondScreen")
   m.top.appendChild(m.secondScreenComponent)
+  m.secondScreenComponent.buttonSelected = m.currentElement.HDBranded 
+  m.secondScreenComponent.trigger =  trigger
   m.secondScreenComponent.setFocus(true)
   m.secondScreenComponent.dataSecondScreen = m.secondScreenData
   m.secondScreenComponent.setFocusVideo = true
@@ -112,8 +118,11 @@ function setSecondScreenContent(event)
     if key = "back" 
       if  m.secondScreenComponent <> invalid  
          if m.secondScreenComponent.buttonSelected 
-           m.currentElement.HDBranded = true
+          m.currentElement.HDBranded = true
+         else 
+          m.currentElement.HDBranded = false
          end if
+      
          m.top.removeChild(m.secondScreenComponent)
          m.secondScreenComponent = invalid
          m.rowListOfCars.setFocus(true)

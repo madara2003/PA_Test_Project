@@ -20,7 +20,18 @@ sub init()
    m.interpheight = m.top.findNode("interpheight")
    displayDepandsOnMode()
 end sub
- 
+
+function customizeButton()
+   if m.top.trigger 
+      m.button.text = "Remove from favorites"
+      m.button.textColor = "#FFFF00"
+    else 
+       m.button.text = "Add to favorites"
+       m.button.textColor = "#000080"
+    end if 
+end function
+
+
 function displayDepandsOnMode()
     di = CreateObject("roDeviceInfo")
     if di.GetDisplayMode() = "720p"
@@ -33,12 +44,22 @@ function displayDepandsOnMode()
   end function
 
 function onSelectButton()
+  
    sec = CreateObject("roRegistrySection", "Favorites")
-   sec.write(m.top.key, "true")
-   sec.Flush()
-   m.button.textColor = "#006400"
-   m.button.focusedTextColor = "#006400"
-   m.top.buttonSelected = true
+   if m.top.trigger 
+      sec.Delete(m.top.key)
+      m.top.trigger = false
+      m.top.dislikeButton= false
+      m.top.buttonSelected = false
+   else   
+      m.top.buttonSelected = true
+     sec.write(m.top.key, "true")
+     sec.Flush()
+     m.button.textColor = "#006400"
+     m.button.focusedTextColor = "#006400"
+     m.top.dislikeButton= true
+     m.top.trigger = true
+   end if 
 end function 
 
 function setAnimationVideo()
@@ -133,20 +154,31 @@ function OnKeyEvent(key, press) as boolean
       end if
       if key = "down"
         if m.video.translation[0] = 800
-           m.button.setFocus(true)
-           if m.button.hasFocus()
-             m.videoFocus.visible = false
-           end if
+             if  m.videoFocus.visible
+             m.button.setFocus(true)
+             if m.button.hasFocus()
+               m.videoFocus.visible = false
+             end if
+         end if
         end if
       end if
+      if key = "left"
+         m.descriptionText.setFocus(true)
+         m.videoFocus.visible = false
+      end if 
+      if key = "right"
+         m.button.setFocus(true)
+      end if 
       if key = "up"
         if  m.video.translation[0] = 800
+         if m.button.hasFocus()
           m.button.setFocus(false)
           m.top.setFocus(true)
           if not m.button.hasFocus() 
             m.videoFocus.visible = true
           end if
         end if
+       end if
       end if
           return handle
 end function
